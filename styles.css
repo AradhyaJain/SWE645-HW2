@@ -1,0 +1,96 @@
+/*
+    Author: Aradhya Jain
+	Email: ajain30@gmu.edu
+    SWE 645 : Homework 1
+    Cascading Style Sheet (CSS)
+ */
+
+
+/* GMU Green color for headers */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #006633;
+}
+
+/* Department heading styling */
+.department-heading {
+  background-color: #006633; /* GMU Green */
+  color: #FFCC33; /* White text */
+  border: 5px solid #006633; /* Solid border */
+  padding: 20px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Box shadow */
+}
+
+/* University logo */
+.university-logo {
+  max-width: 125%; 
+  height: auto;
+  float: left; /* Float logo to the left */
+  margin-right: 20px; /* Add some space between logo and university name */
+}
+
+/* University name */
+.university-name {
+  color: #FFCC33; /* Gold */
+  line-height: 125px; /* Align vertically with the logo */
+}
+
+/* Body background color */
+body {
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #FFCC33; /* Gold */
+}
+
+.bg-green {
+  background-color: #006633 !important;
+}
+/* GMU Gold text color */
+.text-gold {
+  color: #FFCC33 !important;
+}
+
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.header-box {
+    border: 5px solid #006633; /* Adjust thickness and color as needed */
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box-shadow for a subtle effect */
+}
+
+/* Survey Form Section */
+#survey {
+  text-align: left;
+}
+
+#survey .text-justify {
+  text-align: justify;
+}
+
+/* Survey Button */
+.btn-gold {
+  background-color: #FFCC33; /* Gold */
+  color: #006633; /* GMU Green */
+  border: none;
+}
+
+.btn-gold:hover {
+  background-color: #CC9900; /* Darker Gold on hover */
+}
+
+/* Required field indicator */
+.required {
+    color: red; /* Change the color to make it stand out */
+    font-size: 18px; /* Adjust the font size as needed */
+}

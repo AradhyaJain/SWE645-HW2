@@ -1,0 +1,210 @@
+<!-- 
+    Author: Aradhya Jain
+    Email: ajain30@gmu.edu
+    SWE 645 : Homework 1
+    Student Survey Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Survey</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            }
+    </style>
+</head>
+<body class="bg-light">
+<!-- Bootstrap Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid" id="home">
+            <a class="navbar-brand" href="#">George Mason University</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="http://aradhya-swe645.s3-website-us-east-1.amazonaws.com/index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#survey">Survey Form</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="header-box" id="survey">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <img src="Nuniversity_logo.png" alt="University Logo" class="university-logo">
+                </div>
+            </div>
+        </div>
+    </header>
+    <br>
+    <div class="container mt-3">
+        <section id="survey">
+            <h2 class="text-center">STUDENT SURVEY FORM</h2>
+            <!-- Survey Form Starts -->
+            <form id="survey-form" action="#" method="post" autocomplete="on">
+                <table class="table text-left">
+                    <tbody>
+                        <!-- Required Text Inputs -->
+                        <tr>
+                            <td><label for="first_name">First Name <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="first_name" name="first_name" placeholder="John" required autofocus></td>
+                        </tr>
+                        <tr>
+                            <td><label for="last_name">Last Name <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="last_name" name="last_name" placeholder="Doe" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="address">Street Address <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="address" name="address" placeholder="123 Main St" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="city">City <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="city" name="city" placeholder="Fairfax" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="state">State <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="state" name="state" placeholder="VA" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="zip">Zip <span class="required">*</span></label></td>
+                            <td><input type="number" class="form-control" id="zip" name="zip" placeholder="22031" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="phone">Telephone <span class="required">*</span></label></td>
+                            <td><input type="tel" class="form-control" id="phone" name="phone" placeholder="123-456-7890" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="email">Email <span class="required">*</span></label></td>
+                            <td><input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" required></td>
+                        </tr>
+    
+                        <!-- Checkboxes for Campus Likes -->
+                        <tr>
+                            <td><label>What did you like most about the campus? <span class="required">*</span></label></td>
+                            <td>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="students" name="likes[]" value="students">
+                                    <label class="form-check-label" for="students">Students</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="location" name="likes[]" value="location">
+                                    <label class="form-check-label" for="location">Location</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="campus" name="likes[]" value="campus">
+                                    <label class="form-check-label" for="campus">Campus</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="atmosphere" name="likes[]" value="atmosphere">
+                                    <label class="form-check-label" for="atmosphere">Atmosphere</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="dorms" name="likes[]" value="dorms">
+                                    <label class="form-check-label" for="dorms">Dorm Rooms</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="sports" name="likes[]" value="sports">
+                                    <label class="form-check-label" for="sports">Sports</label>
+                                </div>
+                            </td>
+                        </tr>
+    
+                        <!-- Radio Buttons for Interest -->
+                        <tr>
+                            <td><label>How did you become interested in the university? <span class="required">*</span></label></td>
+                            <td>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="friends" name="interest" value="friends" required>
+                                    <label class="form-check-label" for="friends">Friends</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="tv" name="interest" value="tv" required>
+                                    <label class="form-check-label" for="tv">Television</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="internet" name="interest" value="internet" required>
+                                    <label class="form-check-label" for="internet">Internet</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="other" name="interest" value="other" required>
+                                    <label class="form-check-label" for="other">Other</label>
+                                </div>
+                            </td>
+                        </tr>
+    
+                        <!-- Dropdown for Recommendation Likelihood -->
+                        <tr>
+                            <td><label for="recommend">Likelihood of Recommending <span class="required">*</span></label></td>
+                            <td>
+                                <select class="form-control" id="recommend" name="recommend" required>
+                                    <option value="">Select</option>
+                                    <option value="Very Likely">Very Likely</option>
+                                    <option value="Likely">Likely</option>
+                                    <option value="Unlikely">Unlikely</option>
+                                </select>
+                            </td>
+                        </tr>
+    
+                        <!-- Raffle Input -->
+                        <tr>
+                            <td><label for="raffle">Raffle: Enter at least 10 comma-separated numbers between 1 and 100 <span class="required">*</span></label></td>
+                            <td><input type="text" class="form-control" id="raffle" name="raffle" required pattern="^(\s*([1-9]|[1-9][0-9]|100)\s*,\s*){9,}([1-9]|[1-9][0-9]|100)\s*$" title="Please enter at least 10 numbers between 1 and 100, separated by commas."></td>
+                        </tr>
+    
+                        <!-- Comments Section -->
+                        <tr>
+                            <td><label for="comments">Additional Comments</label></td>
+                            <td><textarea class="form-control" id="comments" name="comments" rows="3"></textarea></td>
+                        </tr>     
+                    </tbody>
+                </table>
+    
+                <!-- Submit and Cancel Buttons -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                </div>                
+            </form>
+        </section>
+    </div>
+    
+
+    <!-- Footer -->
+    <footer class="bg-green text-gold py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-gold">Created by <a class="text-gold" href="http://aradhya-swe645.s3-website-us-east-1.amazonaws.com/index.html">Aradhya Jain</a></h4>
+                    <p>Connect with me on LinkedIn:</p>
+                    <a href="https://www.linkedin.com/in/aradhyajain/" class="btn btn-outline-light">Visit my LinkedIn Profile</a>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt-fill text-gold"></i> Fairfax, VA 22030</li>
+                        <li><i class="bi bi-telephone-fill text-gold"></i> Phone: +1 (571) 244-8114</li>
+                        <li><i class="bi bi-envelope-fill text-gold"></i> Email: <a href="mailto:ajain30@gmu.edu" class="text-gold">ajain30@gmu.edu</a></li>
+                        <li><i class="bi"> </i> G#: G01462086</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gold py-3">
+            <p>&copy; 2024 George Mason University. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+</body>
+</html>
