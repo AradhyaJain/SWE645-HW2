@@ -7,12 +7,13 @@ pipeline {
         DOCKER_TAG = 'latest'
         DEPLOYMENT_YAML_PATH = 'deployment.yaml'
         SERVICE_YAML_PATH = 'service.yaml'
-        DOCKER_CREDENTIALS_ID = 'dockerhub_cred'  // Update to your credentials ID
+        DOCKER_CREDENTIALS_ID = '87dfce82-60bc-4e66-ad52-b443bb2a5569' // Docker credentials ID
     }
 
     stages {
         stage('Clone Repository') {
             steps {
+                // Clone the GitHub repository
                 checkout scm
             }
         }
@@ -20,7 +21,7 @@ pipeline {
         stage('Enable BuildKit') {
             steps {
                 script {
-                    // Enable BuildKit environment for Docker
+                    // Enable BuildKit for Docker
                     sh 'export DOCKER_BUILDKIT=1'
                 }
             }
@@ -29,9 +30,9 @@ pipeline {
         stage('Build Docker Image with Buildx') {
             steps {
                 script {
-                    // Initialize and use Buildx to build the image
+                    // Use Buildx to build the Docker image
                     sh 'docker buildx create --use'
-                    sh 'docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
+                    sh "docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE}:${DOCKER_TAG} --push ."
                 }
             }
         }
@@ -39,11 +40,10 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerhub_cred', variable: 'DOCKER_PASSWORD')]) {
-                        // Login to Docker Hub
+                    // Log in to Docker Hub and push the image
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, 
+                        usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin"
-
-                        // Push the Docker image to Docker Hub
                         sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     }
                 }
@@ -53,6 +53,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Deploy the app using the provided Kubernetes YAML files
                     sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH}"
                     sh "kubectl apply -f ${SERVICE_YAML_PATH}"
                 }
