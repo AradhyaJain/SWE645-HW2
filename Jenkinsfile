@@ -2,26 +2,36 @@ pipeline {
     agent any
 
     environment {
-        // Define the environment variables for your pipeline
-        DOCKER_IMAGE = 'ajain30/survey'  // Replace with your Docker image name
-        DOCKER_TAG = 'latest'            // You can change it to '${env.BUILD_ID}' if needed for unique tagging
-        DEPLOYMENT_YAML_PATH = 'deployment.yaml'  // Path to deployment YAML in your repo
-        SERVICE_YAML_PATH = 'service.yaml'  // Path to service YAML in your repo
+        DOCKER_USERNAME = 'ajain30'
+        DOCKER_IMAGE = 'ajain30/survey'
+        DOCKER_TAG = 'latest'
+        DEPLOYMENT_YAML_PATH = 'deployment.yaml'
+        SERVICE_YAML_PATH = 'service.yaml'
+        DOCKER_CREDENTIALS_ID = 'dockerhub_cred'  // Update to your credentials ID
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                // Clone the repository containing your Jenkinsfile, YAML files, and Dockerfile
                 checkout scm
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Enable BuildKit') {
             steps {
                 script {
-                    // Build the Docker image from the Dockerfile in the repo
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    // Enable BuildKit environment for Docker
+                    sh 'export DOCKER_BUILDKIT=1'
+                }
+            }
+        }
+
+        stage('Build Docker Image with Buildx') {
+            steps {
+                script {
+                    // Initialize and use Buildx to build the image
+                    sh 'docker buildx create --use'
+                    sh 'docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
                 }
             }
         }
@@ -29,13 +39,12 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Use the saved Docker Hub credentials to log in and push the image
-                    withCredentials([string(credentialsId: 'c86da864-8d8c-4b80-bf92-c4f0d151d616', variable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([string(credentialsId: 'dockerhub_cred', variable: 'DOCKER_PASSWORD')]) {
                         // Login to Docker Hub
-                        sh "echo \$DOCKER_PASSWORD | docker login --username ajain30 --password-stdin"
+                        sh "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin"
 
                         // Push the Docker image to Docker Hub
-                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                        sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     }
                 }
             }
@@ -44,9 +53,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Apply the deployment and service YAML files to the Kubernetes cluster
-                    sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
-                    sh "kubectl apply -f ${SERVICE_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
+                    sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH}"
+                    sh "kubectl apply -f ${SERVICE_YAML_PATH}"
                 }
             }
         }
@@ -54,10 +62,10 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment successful!'
+            echo 'Pipeline executed successfully!'
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
