@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-survey-deployment
+  labels:
+    app: student-survey
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: student-survey
+  template:
+    metadata:
+      labels:
+        app: student-survey
+    spec:
+      containers:
+      - name: student-survey-container
+        image: ajain30/survey:latest  # Use the correct image
+        ports:
+        - containerPort: 80
