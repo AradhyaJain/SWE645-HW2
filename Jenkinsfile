@@ -21,7 +21,7 @@ pipeline {
                         passwordVariable: 'GIT_PASSWORD',
                         usernameVariable: 'GIT_USERNAME'
                     )]) {
-                        sh "git clone https://github.com/AradhyaJain/SWE645-HW2.git"
+                        sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/AradhyaJain/SWE645-HW2.git"
                         sh 'cd SWE645-HW2'
                     }
                 }
