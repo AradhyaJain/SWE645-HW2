@@ -17,5 +17,6 @@ spec:
       containers:
       - name: student-survey-container
         image: ajain30/survey:latest  # Use the correct image
+        imagePullpolicy: Always
         ports:
         - containerPort: 80
