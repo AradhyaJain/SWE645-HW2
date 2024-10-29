@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: student-survey-container
-        image: ajain30/survey:latest  # Use the correct image
+        image: ajain30/survey:latest  # Correct Docker image
+        imagePullPolicy: Always       # Ensure Kubernetes pulls the latest image
         ports:
         - containerPort: 80
