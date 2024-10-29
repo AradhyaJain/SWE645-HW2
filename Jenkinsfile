@@ -47,6 +47,9 @@ pipeline {
                     // Apply the Kubernetes YAML files to deploy to the cluster
                     sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
                     sh "kubectl apply -f ${SERVICE_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
+
+                    // Force rollout restart to ensure latest image is pulled
+                    sh 'kubectl rollout restart deployment student-survey-deployment --kubeconfig /var/lib/jenkins/.kube/config'
                 }
             }
         }
