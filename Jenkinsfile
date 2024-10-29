@@ -2,54 +2,40 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USERNAME = 'ajain30'
-        DOCKER_IMAGE = 'ajain30/survey'
-        DOCKER_TAG = 'latest'
-        DEPLOYMENT_YAML_PATH = 'deployment.yaml'
-        SERVICE_YAML_PATH = 'service.yaml'
-        DOCKER_CREDENTIALS_ID = 'dockerhub_cred'
-        GITHUB_CREDENTIALS_ID = 'github'
+        DOCKER_IMAGE = 'ajain30/survey'      // Docker image name
+        DOCKER_TAG = 'latest'                // Tag for the Docker image; change to '${env.BUILD_ID}' for unique tags per build
+        DOCKER_USERNAME = 'ajain30'          // Docker Hub username
+        DEPLOYMENT_YAML_PATH = 'deployment.yaml'  // Path to deployment YAML in the repository
+        SERVICE_YAML_PATH = 'service.yaml'   // Path to service YAML in the repository
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                script {
-                    withCredentials([usernamePassword(
-                        credentialsId: GITHUB_CREDENTIALS_ID,
-                        passwordVariable: 'GIT_PASSWORD',
-                        usernameVariable: 'GIT_USERNAME'
-                    )]) {
-                        // Remove directory if it exists
-                        sh 'rm -rf SWE645-HW2 || true'
+                // Clone the repository containing Jenkinsfile, Dockerfile, and YAML files
+                checkout scm
+            }
+        }
 
-                        // Clone the repository
-                        sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD.toString()}@github.com/AradhyaJain/SWE645-HW2.git"
-                        sh 'cd SWE645-HW2'
-                    }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image from the Dockerfile
+                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                 }
             }
         }
 
-        stage('Enable BuildKit') {
+        stage('Push Docker Image') {
             steps {
                 script {
-                    sh 'export DOCKER_BUILDKIT=1'
-                }
-            }
-        }
-
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(
-                        credentialsId: DOCKER_CREDENTIALS_ID,
-                        passwordVariable: 'DOCKER_PASSWORD',
-                        usernameVariable: 'DOCKER_USERNAME'
-                    )]) {
-                        sh 'docker buildx create --use'
-                        sh "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin"
-                        sh "docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE}:${DOCKER_TAG} --push ."
+                    // Use Jenkins credentials for secure login and push to Docker Hub
+                    withCredentials([string(credentialsId: 'docker_hub_pass', variable: 'DOCKER_PASSWORD')]) {
+                        // Login to Docker Hub
+                        sh "echo \$DOCKER_PASSWORD | docker login --username \$DOCKER_USERNAME --password-stdin"
+                        
+                        // Push the Docker image
+                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
                 }
             }
@@ -58,8 +44,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH}"
-                    sh "kubectl apply -f ${SERVICE_YAML_PATH}"
+                    // Apply the Kubernetes YAML files to deploy to the cluster
+                    sh "kubectl apply -f ${DEPLOYMENT_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
+                    sh "kubectl apply -f ${SERVICE_YAML_PATH} --kubeconfig /var/lib/jenkins/.kube/config"
                 }
             }
         }
@@ -67,10 +54,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'Deployment successful!'
         }
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            echo 'Deployment failed!'
         }
     }
 }
